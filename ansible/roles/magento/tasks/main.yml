@@ -1,0 +1,49 @@
+- name: Download Magento
+  get_url: url=http://www.magentocommerce.com/downloads/assets/1.9.1.0/magento-1.9.1.0.tar.gz dest=/root/magento-1.9.1.0.tar.gz
+
+- name: Unpack Magento
+  unarchive: src=/root/magento-1.9.1.0.tar.gz dest=/var/www copy=no owner=apache group=apache creates=/var/www/magento
+
+- name: Set owner on /var/www/magento
+  file: dest=/var/www/magento recurse=true owner=apache group=apache
+
+- name: Install MySQL-python
+  yum: name=MySQL-python state=latest
+
+- name: Create MySQL user
+  mysql_user: name={{ magento_database_user }} password={{ magento_database_password }} priv={{ magento_database_name }}.*:ALL
+
+- name: Create MySQL database
+  mysql_db: name={{ magento_database_name }} state=present
+
+- name: Complete Magento Install Wizard
+  shell: php -f install.php -- \
+    --license_agreement_accepted "yes" \
+    --locale "en_US" \
+    --timezone "America/Toronto" \
+    --default_currency "USD" \
+    --db_host "localhost" \
+    --db_name "{{ magento_database_name }}" \
+    --db_user "{{ magento_database_user }}" \
+    --db_pass "{{ magento_database_password }}" \
+    --db_prefix "" \
+    --session_save "{{ magento_session_save }}" \
+    --url "http://{{ magento_full_hostname }}/" \
+    --use_rewrites "yes" \
+    --use_secure "{{ magento_use_secure }}" \
+    --secure_base_url "https://{{ magento_full_hostname }}/" \
+    --use_secure_admin "{{ magento_admin_use_secure }}" \
+    --admin_firstname "{{ magento_admin_firstname }}" \
+    --admin_lastname "{{ magento_admin_lastname }}" \
+    --admin_email "{{ magento_admin_email }}" \
+    --admin_username "{{ magento_admin_user }}" \
+    --admin_password "{{ magento_admin_password }}" \
+    --encryption_key "{{ magento_encryption_key }}"
+  args:
+    chdir: /var/www/magento
+    creates: /var/www/magento/app/etc/local.xml
+
+- name: Reconfigure Apache
+  copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf owner=root group=root mode=0644
+  notify:
+    - restart apache

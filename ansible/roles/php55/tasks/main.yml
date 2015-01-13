@@ -1,0 +1,17 @@
+- name: add repository 'remi-repo'
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
+- name: Install PHP 5.5
+  yum: name=php state=latest enablerepo=remi-php55
+
+- name: Install PHP GD
+  yum: name=php-gd state=latest enablerepo=remi,remi-php55
+
+- name: Install PHP mcrypt
+  yum: name=php-mcrypt state=latest enablerepo=remi,remi-php55
+
+- name: Install PHP PDO
+  yum: name=php-pdo state=latest enablerepo=remi,remi-php55
+
+- name: Instlal PHP MySQL
+  yum: name=php-mysql state=latest enablerepo=remi,remi-php55
