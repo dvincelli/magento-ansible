@@ -13,5 +13,8 @@
 - name: Install PHP PDO
   yum: name=php-pdo state=latest enablerepo=remi,remi-php55
 
+- name: Install PHP MB
+  yum: name=php-mbstring state=latest enablerepo=remi,remi-php55
+
 - name: Instlal PHP MySQL
   yum: name=php-mysql state=latest enablerepo=remi,remi-php55
