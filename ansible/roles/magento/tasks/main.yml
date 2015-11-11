@@ -1,8 +1,12 @@
-- name: Download Magento
-  get_url: url=http://www.magentocommerce.com/downloads/assets/{{ magento_version }}/magento-{{ magento_version }}.tar.gz dest=/root/magento-{{ magento_version }}.tar.gz
+- name: Install Subversion
+  yum: name="subversion" state=latest
 
-- name: Unpack Magento
-  unarchive: src=/root/magento-{{ magento_version }}.tar.gz dest=/var/www copy=no owner=apache group=apache creates=/var/www/magento
+- stat: path=/var/www/magento
+  register: magento_dir
+
+- name: Download Magento
+  subversion: repo=http://svn.magentocommerce.com/source/branches/{{ magento_version }} dest=/var/www/magento export=True
+  when: magento_dir.stat.exists == False
 
 - name: Set owner on /var/www/magento
   file: dest=/var/www/magento recurse=true owner=apache group=apache
