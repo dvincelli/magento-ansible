@@ -1,0 +1,14 @@
+magento_database_name: magento
+magento_database_user: magento
+magento_database_password: magento
+magento_session_save: db
+magento_use_secure: no
+magento_admin_use_secure: no
+magento_admin_firstname: John
+magento_admin_lastname: Doe
+magento_admin_email: example@example.org
+magento_admin_user: admin
+magento_admin_password: example
+magento_encryption_key: e364de3091504fa0a668acb502ee4949ea5f2418a6b54fe293c472f0
+magento_full_hostname: www.example.org
+magento_version: 1.9
