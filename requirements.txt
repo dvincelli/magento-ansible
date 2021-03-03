@@ -1,6 +1,6 @@
 SoftLayer==3.3.1
 docopt==0.6.1
 prettytable==0.7.2
-requests==2.5.1
+requests==2.20.0
 six==1.9.0
 wsgiref==0.1.2
